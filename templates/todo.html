@@ -1,0 +1,45 @@
+{% extends 'Layout.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-center align-items-center mb-4">
+                <div>
+                    <a class="btn btn-primary" href="/todos/add-todo-page">Add Todo</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if todos %}
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for todo in todos %}
+                        <tr>
+                            <td class="{% if todo.complete %}strike-through-td{% endif %}">{{ todo.title }}</td>
+                            <td>{{ todo.description }}</td>
+                            <td>{{ todo.priority }}</td>
+                            <td>{% if todo.complete %}Complete{% else %}Open{% endif %}</td>
+                            <td class="text-right">
+                                <a class="btn btn-sm btn-outline-primary" href="/todos/edit-todo-page/{{ todo.id }}">Edit</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info">No todos yet.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
