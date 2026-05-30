@@ -49,6 +49,9 @@ def redirect_to_login():
 async def render_todo_page(request: Request, db: db_dependency):
     try:
         token = request.cookies.get('access_token')
+        if not token:
+            return redirect_to_login()
+
         user = await get_current_user(token)
 
         if user is None:
@@ -169,7 +172,6 @@ async def delete_todo(user: user_dependency, db: db_dependency, todo_id: int = P
     db.query(Todos).filter(Todos.id == todo_id).filter(Todos.owner_id == user.get('id')).delete()
 
     db.commit()
-
 
 
 

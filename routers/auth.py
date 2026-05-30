@@ -100,6 +100,9 @@ def create_access_token(username: str, user_id: int, role: str, expires_delta: t
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Could not validate user.')
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         print(payload)
@@ -143,7 +146,6 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
     token = create_access_token(user.username, user.id, user.role, timedelta(minutes=20))
 
     return {'access_token': token, 'token_type': 'bearer'}
-
 
 
 
